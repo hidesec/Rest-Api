@@ -54,28 +54,30 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {          
-            return response()->json(['success' => false, 'message'=>$validator->errors()], 401);            
+            return response()->json(['array'=>true,'success' => false, 'message'=>$validator->errors()], 401);            
         }
         // dd($decodeBro);
         $username = DB::table('users')->where('name',$decodeBro['email'])->orWhere('email',$decodeBro['email'])->first();
         if ($username) {
             if(Auth::attempt(['email' => $username->email, 'password' => $decodeBro['password']])){
-                if($username->email_verified_at == 1 || $username->profile_verified_at == 1){
-                    $user = Auth::user(); 
-                    $success['token'] =  $user->createToken('AppName')->accessToken; 
-                    return response()->json(['success' => true,$success], $this->successStatus);
-                }else if($username->email_verified_at == 0){
-                    return response()->json(['success' => false, 'message'=>'email not verified!'], 401);
+              if($username->email_verified_at == 0){
+                    return response()->json(['success' => false, 'message'=>'Please Verified Your Email'], 401);
                 }else if($username->profile_verified_at == 0){
                     $user = Auth::user(); 
                     $success['token'] =  $user->createToken('AppName')->accessToken; 
-                    return response()->json(['success' => true, 'message' => 'profile not verified', $success], $this->successStatus);
+                    return response()->json(['success' => true, 'message' => 'profile_not_verified', $success], $this->successStatus);
+                }else{
+                    $user = Auth::user(); 
+                 $encode = $this->secure->encode($user->id);
+
+                    $token =  $user->createToken('AppName')->accessToken; 
+                    return response()->json(['success' => true   ,'token'=> $token,'id_user' => $encode], $this->successStatus);
                 }
             } else{
                 return response()->json(['success' => false,'message' => 'password invalid'], $this->successStatus); 
             }
         }else{ 
-            return response()->json(['success'=>false, 'message'=>'invalid username & password'], 401); 
+            return response()->json(['success'=>false, 'message'=>'invalid username or password'], 401); 
         } 
     }
     
@@ -123,7 +125,24 @@ class AuthController extends Controller
         }
         return response()->json([
             'success' =>true,
-            'message' => 'This token valid'
+            'message' => "Token Valid",
         ], 404);
+    }
+    public function email_verified($token)
+    {
+        $check = $this->check_token($token);
+        if($check->success){
+        $id_user = DB::table('verified_token')->where('token',$token)->first()->id_user;
+            User::where('id',$id_user)->update(['email_verified_at' => true]);
+            return response()->json([
+                'success' =>true,
+                'message' => "Email Success Verified",
+            ], 404);
+        }else{
+            return response()->json([
+                'success' =>false,
+                'message' => json_decode($check)->message,
+            ], 404);
+        }
     }
 } 

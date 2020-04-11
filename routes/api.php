@@ -22,6 +22,10 @@ Route::prefix('v1')->group(function(){
     Route::post('register', 'Api\AuthController@register');
     Route::group(['middleware' => 'auth:api'], function(){
         Route::post('getUser', 'Api\AuthController@getUser');
-        Route::get('profile_user/{id_user}', 'Api\profile_user@index_profile_user');
+        //profile user
+        Route::get('profile-user/{encode}', 'Api\profile_user@index_profile_user');
+        Route::post('create-profile-user', 'Api\profile_user@create_profile_user');
+        Route::post('update-profile-user', 'Api\profile_user@update_profile_user');
+        Route::post('delete-profile-user/{encode}', 'Api\profile_user@delete_user_profile');
     });
 });

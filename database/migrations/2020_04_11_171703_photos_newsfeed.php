@@ -15,6 +15,7 @@ class PhotosNewsfeed extends Migration
     {
         Schema::create('photos_newsfeed', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('id_user');
             $table->string('name_photos');
             $table->string('url_photos');
             $table->timestamps();

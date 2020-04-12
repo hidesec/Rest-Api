@@ -17,8 +17,6 @@ class Newsfeed extends Migration
             $table->bigIncrements('id');
             $table->integer('id_user');
             $table->longText('posts');
-            $table->integer('id_photos')->nullable();
-            $table->integer('id_videos')->nullable();
             $table->timestamps();
         });
     }

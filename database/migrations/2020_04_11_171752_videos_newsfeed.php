@@ -15,6 +15,7 @@ class VideosNewsfeed extends Migration
     {
         Schema::create('videos_newsfeed', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('id_user');
             $table->string('name_videos');
             $table->string('url_videos');
             $table->timestamps();

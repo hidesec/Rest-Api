@@ -29,9 +29,19 @@ Route::prefix('v1')->group(function(){
         Route::post('update-profile-user', 'Api\profile_user@update_profile_user');
         Route::post('delete-profile-user/{encode}', 'Api\profile_user@delete_user_profile');
         //newsfeed
-        Route::get('newsfeed/{id_user}', 'Api\NewsfeedController@index_newsfeed');
+        Route::get('newsfeed/{encode}', 'Api\NewsfeedController@index_newsfeed');
         Route::post('create-newsfeed', 'Api\NewsfeedController@create_newsfeed');
         Route::post('update-newsfeed', 'Api\NewsfeedController@update_newsfeed');
         Route::post('delete-newsfeed', 'Api\NewsfeedController@delete_newsfeed');
+        //photosnewsfeed
+        Route::get('index-photos', 'Api\Photos_Controller@index_photos');
+        Route::post('create-photos', 'Api\Photos_Controller@create_photos');
+        Route::post('update-photos', 'Api\Photos_Controller@update_photos');
+        Route::post('delete-photos', 'Api\Photos_Controller@delete_photos');
+        //photosnewsfeed
+        Route::get('index-videos', 'Api\Videos_Controller@index_videos');
+        Route::post('create-videos', 'Api\Videos_Controller@create_videos');
+        Route::post('update-videos', 'Api\Videos_Controller@update_videos');
+        Route::post('delete-videos', 'Api\Videos_Controller@delete_videos');
     });
 });

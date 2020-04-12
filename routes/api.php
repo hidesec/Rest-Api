@@ -43,5 +43,11 @@ Route::prefix('v1')->group(function(){
         Route::post('create-videos', 'Api\Videos_Controller@create_videos');
         Route::post('update-videos', 'Api\Videos_Controller@update_videos');
         Route::post('delete-videos', 'Api\Videos_Controller@delete_videos');
+        //photos profile user
+        Route::get('photo-profile-user/{encode}', 'Api\PhotosProfileUserController@index_photos_user_profile');
+        Route::post('upload-photo', 'Api\PhotosProfileUserController@create_photos_user_profile');
+        Route::post('update-upload-photo', 'Api\PhotosProfileUserController@update_photos_user_profile');
+        Route::post('delete-profile-photo/{encode}', 'Api\PhotosProfileUserController@delete_photos_profile_user');
+
     });
 });

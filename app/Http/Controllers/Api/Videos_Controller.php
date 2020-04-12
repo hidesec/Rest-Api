@@ -17,6 +17,10 @@ class Videos_Controller extends Controller
 {
     public $successStatus = 200;
 
+    public function __construct() {
+        $this->secure = new secure();
+    }
+
     public function index_videos(Request $request)
     {
         // $decodeBro = $this->secure->decode($encode);

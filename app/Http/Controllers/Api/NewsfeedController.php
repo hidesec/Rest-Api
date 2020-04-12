@@ -16,6 +16,10 @@ class NewsfeedController extends Controller
 {
     public $successStatus = 200;
 
+    public function __construct() {
+        $this->secure = new secure();
+    }
+
     public function index_newsfeed($encode){
         // $decodeBro = $this->secure->decode($encode);
         $friends = DB::table('friends')->where('id_user', $encode)->get();

@@ -16,7 +16,7 @@ class secure
    public function decode($data)
    {
     $decryptions = substr($data,74);
-    $decryption = base64_decode(base64_decode(base64_decode(base64_decode(base64_decode($decryptions)))));
-    return $decryption;     
+    $decr = base64_decode(base64_decode(base64_decode(base64_decode(base64_decode($decryptions)))));
+   return  $decr;    
    }
 }

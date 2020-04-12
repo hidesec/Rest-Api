@@ -68,9 +68,10 @@ class AuthController extends Controller
                     return response()->json(['success' => true, 'message' => 'profile_not_verified', $success], $this->successStatus);
                 }else{
                     $user = Auth::user(); 
-                 $encode = $this->secure->encode($user->id);
-
-                    $token =  $user->createToken('AppName')->accessToken; 
+                    $encode = $this->secure->encode($user->id);
+                    $token =  $user->createToken('AppName')->accessToken;
+                    //online active
+                    DB::table('users')->where('id', $user->id)->update(['active' => 'online']);
                     return response()->json(['success' => true   ,'token'=> $token,'id_user' => $encode], $this->successStatus);
                 }
             } else{
@@ -79,6 +80,13 @@ class AuthController extends Controller
         }else{ 
             return response()->json(['success'=>false, 'message'=>'invalid username or password'], 401); 
         } 
+    }
+
+    //untuk logout
+    public function logout_user($encode){
+        $decodeBro = $this->secure->decode($encode);
+        DB::table('users')->where('id', $decodeBro)->update(['active' => 'offline']);
+        return response()->json(['success' => true   ,'message' => 'user logout!'], $this->successStatus);
     }
     
     public function getUser() {

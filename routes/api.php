@@ -28,6 +28,7 @@ Route::prefix('v1')->group(function(){
         Route::post('create-profile-user', 'Api\profile_user@create_profile_user');
         Route::post('update-profile-user', 'Api\profile_user@update_profile_user');
         Route::post('delete-profile-user/{encode}', 'Api\profile_user@delete_user_profile');
+        Route::post('logout/{encode}', 'Api\profile_user@logout_user');
         //newsfeed
         Route::get('newsfeed/{encode}', 'Api\NewsfeedController@index_newsfeed');
         Route::post('create-newsfeed', 'Api\NewsfeedController@create_newsfeed');

@@ -20,21 +20,24 @@ class NewsfeedController extends Controller
         $this->secure = new secure();
     }
 
-    public function index_newsfeed($encode){
-        // $decodeBro = $this->secure->decode($encode);
-        $friends = DB::table('friends')->where('id_user', $encode)->get();
-        foreach($friends as $keys => $values){
-            $newsfeed = DB::table('newsfeed')
-            ->where('newsfeed.id_user', $values->id_user)
-            ->orWhere('newsfeed.id_user', $values->id_friends)
+    public function index_newsfeed($data){
+        $friends = DB::table('friends')->where('id_user',$data )->get();
+        $id_friends = [];
+        foreach ($friends as $key => $value) {
+           array_push($id_friends,$value->id_friends);
+        }
+            $data = DB::table('newsfeed')
+            ->where('newsfeed.id_user', $data)
+            ->orWhereIn('newsfeed.id_user', $id_friends)
             ->leftJoin('users', 'users.id', '=', 'newsfeed.id_user')
+            ->leftJoin('photos_profile_user', 'photos_profile_user.id_user', '=', 'users.id')
             ->leftJoin('photos_newsfeed', 'photos_newsfeed.id_user', '=', 'newsfeed.id_user')
             ->leftJoin('videos_newsfeed', 'videos_newsfeed.id_user', '=', 'newsfeed.id_user')
-            ->select('users.name', 'newsfeed.posts', 'photos_newsfeed.url_photos', 'videos_newsfeed.url_videos', 'newsfeed.created_at', 'newsfeed.created_at')
-            ->orderBy('created_at', 'desc')
-            ->take(15)->get();
-        }
-        return response()->json(['success' => true, 'data'=> $newsfeed], $this->successStatus);
+            ->select('users.name', 'newsfeed.posts','photos_profile_user.url_photos as profile','newsfeed.id_user', 'photos_newsfeed.url_photos', 'videos_newsfeed.url_videos', 'newsfeed.created_at', 'newsfeed.created_at')
+            ->whereMonth('newsfeed.created_at',date('m'))
+            ->orderBy('created_at', 'desc')->get();
+            
+        return json_encode(['success' => true, 'data'=> $data], $this->successStatus);
     }
 
     public function create_newsfeed(Request $request){
